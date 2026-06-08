@@ -1,8 +1,13 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js"
+            integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css"
+          integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 
@@ -22,6 +27,7 @@
             --accent2-glow: rgba(0,212,170,0.25);
             --danger: #ff6b8a;
             --sidebar-w: 320px;
+            --infopanel-w: 360px;
             --radius: 14px;
         }
 
@@ -34,7 +40,7 @@
             display: flex;
         }
 
-        /* ── SIDEBAR ── */
+        /* ── LEFT SIDEBAR ── */
         #sidebar {
             width: var(--sidebar-w);
             min-width: var(--sidebar-w);
@@ -46,115 +52,58 @@
             z-index: 10;
             transition: transform .3s cubic-bezier(.4,0,.2,1);
         }
-
         #sidebar.collapsed { transform: translateX(calc(-1 * var(--sidebar-w))); min-width: 0; width: 0; }
 
         .sidebar-header {
             padding: 24px 20px 16px;
             border-bottom: 1px solid var(--border);
         }
-
         .sidebar-header h2 {
-            font-size: 13px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--accent);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 13px; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 1.5px; color: var(--accent); margin-bottom: 16px;
+            display: flex; align-items: center; gap: 8px;
         }
-
         .sidebar-header h2 .material-icons-round { font-size: 18px; }
 
-        .search-wrapper {
-            position: relative;
-        }
-
+        .search-wrapper { position: relative; }
         .search-wrapper .material-icons-round {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 18px;
-            color: var(--text-muted);
-            pointer-events: none;
-            transition: color .2s;
+            position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+            font-size: 18px; color: var(--text-muted); pointer-events: none; transition: color .2s;
         }
-
         #nodeSearch {
-            width: 100%;
-            padding: 10px 14px 10px 42px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            color: var(--text);
-            font-size: 13px;
-            font-family: inherit;
-            outline: none;
+            width: 100%; padding: 10px 14px 10px 42px; background: var(--bg);
+            border: 1px solid var(--border); border-radius: 10px; color: var(--text);
+            font-size: 13px; font-family: inherit; outline: none;
             transition: border-color .2s, box-shadow .2s;
         }
-
         #nodeSearch::placeholder { color: var(--text-muted); }
-        #nodeSearch:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-glow);
-        }
+        #nodeSearch:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
         #nodeSearch:focus + .material-icons-round { color: var(--accent); }
 
-        .node-count {
-            font-size: 11px;
-            color: var(--text-muted);
-            padding: 10px 20px 6px;
-            font-weight: 500;
-        }
+        .node-count { font-size: 11px; color: var(--text-muted); padding: 10px 20px 6px; font-weight: 500; }
 
         #nodeList {
-            flex: 1;
-            overflow-y: auto;
-            padding: 4px 12px 20px;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(108,99,255,0.3) transparent;
+            flex: 1; overflow-y: auto; padding: 4px 12px 20px;
+            scrollbar-width: thin; scrollbar-color: rgba(108,99,255,0.3) transparent;
         }
-
         #nodeList::-webkit-scrollbar { width: 5px; }
         #nodeList::-webkit-scrollbar-track { background: transparent; }
         #nodeList::-webkit-scrollbar-thumb { background: rgba(108,99,255,0.3); border-radius: 10px; }
 
         .node-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 14px;
-            margin-bottom: 2px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all .15s ease;
-            border: 1px solid transparent;
+            display: flex; align-items: center; gap: 12px; padding: 10px 14px;
+            margin-bottom: 2px; border-radius: 10px; cursor: pointer;
+            transition: all .15s ease; border: 1px solid transparent;
         }
-
-        .node-item:hover {
-            background: var(--surface-hover);
-            border-color: var(--border);
-        }
-
+        .node-item:hover { background: var(--surface-hover); border-color: var(--border); }
         .node-item.active {
             background: linear-gradient(135deg, rgba(108,99,255,0.15), rgba(0,212,170,0.08));
-            border-color: var(--accent);
-            box-shadow: 0 0 12px var(--accent-glow);
+            border-color: var(--accent); box-shadow: 0 0 12px var(--accent-glow);
         }
-
         .node-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--accent);
-            box-shadow: 0 0 8px var(--accent-glow);
-            flex-shrink: 0;
-            transition: transform .2s;
+            width: 10px; height: 10px; border-radius: 50%; background: var(--accent);
+            box-shadow: 0 0 8px var(--accent-glow); flex-shrink: 0; transition: transform .2s;
         }
-
         .node-item:hover .node-dot { transform: scale(1.4); }
         .node-item.active .node-dot { background: var(--accent2); box-shadow: 0 0 10px var(--accent2-glow); }
 
@@ -162,63 +111,39 @@
             font-size: 12.5px;
             font-weight: 400;
             color: var(--text);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            word-break: break-all;
+            overflow-wrap: break-word;
+            white-space: normal;
+            line-height: 1.4;
         }
+
 
         .node-item.active .node-label { font-weight: 600; color: #fff; }
-
-        .no-results {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-muted);
-            font-size: 13px;
-        }
+        .no-results { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 13px; }
         .no-results .material-icons-round { font-size: 36px; margin-bottom: 10px; display: block; opacity: .4; }
 
         /* ── MAIN AREA ── */
         #main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            min-width: 0;
+            flex: 1; display: flex; flex-direction: column;
+            position: relative; min-width: 0;
         }
 
         #toolbar {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 20px;
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 8px; padding: 12px 20px;
+            background: var(--surface); border-bottom: 1px solid var(--border);
         }
-
         .tool-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            background: var(--bg);
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: all .15s;
-            font-size: 20px;
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 36px; height: 36px; border: 1px solid var(--border); border-radius: 10px;
+            background: var(--bg); color: var(--text-muted); cursor: pointer;
+            transition: all .15s; font-size: 20px;
         }
         .tool-btn:hover { color: var(--accent); border-color: var(--accent); background: rgba(108,99,255,0.08); }
+        .tool-btn.active-toggle { color: var(--accent2); border-color: var(--accent2); background: rgba(0,212,170,0.08); }
 
         #selected-info {
-            margin-left: auto;
-            font-size: 12px;
-            color: var(--text-muted);
-            max-width: 50%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            margin-left: auto; font-size: 12px; color: var(--text-muted);
+            max-width: 50%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
 
         #mynetwork {
@@ -232,65 +157,166 @@
 
         /* ── LOADING OVERLAY ── */
         #loadingBar {
-            position: absolute;
-            inset: 0;
-            background: rgba(15,15,19,0.92);
-            backdrop-filter: blur(12px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            transition: opacity .5s ease;
+            position: absolute; inset: 0; background: rgba(15,15,19,0.92);
+            backdrop-filter: blur(12px); display: flex; align-items: center;
+            justify-content: center; z-index: 100; transition: opacity .5s ease;
         }
-
         .loader-content { text-align: center; }
-        .loader-content .label { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; letter-spacing: 1px; text-transform: uppercase; font-weight: 500; }
-
+        .loader-content .label {
+            font-size: 13px; color: var(--text-muted); margin-bottom: 16px;
+            letter-spacing: 1px; text-transform: uppercase; font-weight: 500;
+        }
         .progress-track {
-            width: 320px;
-            height: 6px;
-            background: rgba(255,255,255,0.06);
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 10px;
+            width: 320px; height: 6px; background: rgba(255,255,255,0.06);
+            border-radius: 10px; overflow: hidden; margin-bottom: 10px;
         }
-
         #bar {
-            height: 100%;
-            width: 0;
-            border-radius: 10px;
+            height: 100%; width: 0; border-radius: 10px;
             background: linear-gradient(90deg, var(--accent), var(--accent2));
-            box-shadow: 0 0 16px var(--accent-glow);
-            transition: width .3s ease;
+            box-shadow: 0 0 16px var(--accent-glow); transition: width .3s ease;
         }
-
         #text { font-size: 12px; color: var(--text-muted); font-variant-numeric: tabular-nums; }
 
-        /* ── TOGGLE BTN (visible when sidebar collapsed) ── */
-        #sidebarToggle.floating {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            z-index: 20;
+        .vis-tooltip {
+            background: var(--surface) !important; color: var(--text) !important;
+            border: 1px solid var(--border) !important; border-radius: 8px !important;
+            padding: 8px 12px !important; font-family: 'Inter', sans-serif !important;
+            font-size: 12px !important; box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
         }
 
-        /* ── TOOLTIP ── */
-        .vis-tooltip {
-            background: var(--surface) !important;
-            color: var(--text) !important;
-            border: 1px solid var(--border) !important;
-            border-radius: 8px !important;
-            padding: 8px 12px !important;
-            font-family: 'Inter', sans-serif !important;
-            font-size: 12px !important;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+        /* ── RIGHT INFO PANEL ── */
+        #infopanel {
+            width: 0;
+            min-width: 0;
+            height: 100vh;
+            background: var(--surface);
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+            overflow: hidden;
+            transition: width .35s cubic-bezier(.4,0,.2,1), min-width .35s cubic-bezier(.4,0,.2,1);
+        }
+        #infopanel.open {
+            width: var(--infopanel-w);
+            min-width: var(--infopanel-w);
+        }
+
+        .infopanel-header {
+            padding: 20px 20px 14px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .infopanel-header h2 {
+            font-size: 13px; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 1.5px; color: var(--accent2); flex: 1;
+            display: flex; align-items: center; gap: 8px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .infopanel-header h2 .material-icons-round { font-size: 18px; flex-shrink: 0; }
+        .infopanel-header .close-btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 30px; height: 30px; border: 1px solid var(--border); border-radius: 8px;
+            background: var(--bg); color: var(--text-muted); cursor: pointer;
+            transition: all .15s; font-size: 18px; flex-shrink: 0;
+        }
+        .infopanel-header .close-btn:hover {
+            color: var(--danger); border-color: var(--danger); background: rgba(255,107,138,0.08);
+        }
+
+        .infopanel-node-id {
+            padding: 14px 20px 0;
+            flex-shrink: 0;
+        }
+        .infopanel-node-id .badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: linear-gradient(135deg, rgba(108,99,255,0.12), rgba(0,212,170,0.08));
+            border: 1px solid rgba(108,99,255,0.2); border-radius: 8px;
+            padding: 6px 12px; font-size: 11px; font-weight: 500;
+            color: var(--accent); word-break: break-all;
+            max-width: 100%;
+        }
+        .infopanel-node-id .badge .material-icons-round { font-size: 14px; color: var(--accent2); flex-shrink: 0; }
+
+        .infopanel-divider {
+            height: 1px; background: var(--border); margin: 14px 20px;
+            flex-shrink: 0;
+        }
+
+        #infopanelContent {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 20px 24px;
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--text);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0,212,170,0.3) transparent;
+        }
+        #infopanelContent::-webkit-scrollbar { width: 5px; }
+        #infopanelContent::-webkit-scrollbar-track { background: transparent; }
+        #infopanelContent::-webkit-scrollbar-thumb { background: rgba(0,212,170,0.3); border-radius: 10px; }
+
+        /* Style HTML content inside info panel */
+        #infopanelContent h1, #infopanelContent h2, #infopanelContent h3,
+        #infopanelContent h4, #infopanelContent h5, #infopanelContent h6 {
+            color: #fff; margin: 16px 0 8px; font-weight: 600;
+        }
+        #infopanelContent h1 { font-size: 18px; }
+        #infopanelContent h2 { font-size: 16px; }
+        #infopanelContent h3 { font-size: 14px; }
+        #infopanelContent p { margin-bottom: 10px; }
+        #infopanelContent a { color: var(--accent2); text-decoration: none; }
+        #infopanelContent a:hover { text-decoration: underline; }
+        #infopanelContent ul, #infopanelContent ol { padding-left: 20px; margin-bottom: 10px; }
+        #infopanelContent li { margin-bottom: 4px; }
+        #infopanelContent code {
+            background: rgba(108,99,255,0.12); color: var(--accent);
+            padding: 2px 6px; border-radius: 4px; font-size: 12px;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+        #infopanelContent pre {
+            background: var(--bg); border: 1px solid var(--border);
+            border-radius: 8px; padding: 12px; overflow-x: auto;
+            margin-bottom: 12px;
+        }
+        #infopanelContent pre code { background: none; padding: 0; }
+        #infopanelContent table {
+            width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 12px;
+        }
+        #infopanelContent th {
+            text-align: left; padding: 8px 10px; background: var(--bg);
+            border: 1px solid var(--border); color: var(--accent2); font-weight: 600;
+        }
+        #infopanelContent td {
+            padding: 6px 10px; border: 1px solid var(--border);
+        }
+        #infopanelContent strong { color: #fff; }
+        #infopanelContent em { color: var(--accent2); font-style: italic; }
+        #infopanelContent hr {
+            border: none; height: 1px; background: var(--border); margin: 14px 0;
+        }
+        #infopanelContent blockquote {
+            border-left: 3px solid var(--accent); padding: 8px 14px; margin: 10px 0;
+            background: rgba(108,99,255,0.06); border-radius: 0 8px 8px 0;
+            color: var(--text-muted);
+        }
+
+        .infopanel-empty {
+            text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 13px;
+        }
+        .infopanel-empty .material-icons-round {
+            font-size: 40px; margin-bottom: 12px; display: block; opacity: .3;
         }
     </style>
 </head>
 
 <body>
 
-<!-- SIDEBAR -->
+<!-- LEFT SIDEBAR -->
 <div id="sidebar">
     <div class="sidebar-header">
         <h2><span class="material-icons-round">hub</span> Archetype Inclusion Patterns</h2>
@@ -305,14 +331,15 @@
 
 <!-- MAIN -->
 <div id="main">
-<div id="toolbar">
-    <button class="tool-btn" id="toggleSidebar" title="Toggle sidebar"><span class="material-icons-round">menu</span></button>
-    <button class="tool-btn" id="btnFit" title="Fit all"><span class="material-icons-round">fit_screen</span></button>
-    <button class="tool-btn" id="btnZoomIn" title="Zoom in"><span class="material-icons-round">add</span></button>
-    <button class="tool-btn" id="btnZoomOut" title="Zoom out"><span class="material-icons-round">remove</span></button>
-    <button class="tool-btn" id="btnPhysics" title="Pause physics"><span class="material-icons-round">pause</span></button>
-    <span id="selected-info"></span>
-</div>
+    <div id="toolbar">
+        <button class="tool-btn" id="toggleSidebar" title="Toggle sidebar"><span class="material-icons-round">menu</span></button>
+        <button class="tool-btn" id="btnFit" title="Fit all"><span class="material-icons-round">fit_screen</span></button>
+        <button class="tool-btn" id="btnZoomIn" title="Zoom in"><span class="material-icons-round">add</span></button>
+        <button class="tool-btn" id="btnZoomOut" title="Zoom out"><span class="material-icons-round">remove</span></button>
+        <button class="tool-btn" id="btnPhysics" title="Pause physics"><span class="material-icons-round">pause</span></button>
+        <button class="tool-btn" id="btnInfoPanel" title="Toggle info panel"><span class="material-icons-round">info</span></button>
+        <span id="selected-info"></span>
+    </div>
     <div id="mynetwork"></div>
     <div id="loadingBar">
         <div class="loader-content">
@@ -323,93 +350,37 @@
     </div>
 </div>
 
+<!-- RIGHT INFO PANEL -->
+<div id="infopanel">
+    <!--<div class="infopanel-header">
+        <h2><span class="material-icons-round">description</span> <span id="infopanelTitle">Node Info</span></h2>
+        <button class="close-btn" id="closeInfoPanel" title="Close panel"><span class="material-icons-round">close</span></button>
+    </div>-->
+    <div class="infopanel-node-id" id="infopanelNodeId" style="display:none;">
+        <div class="badge"><span class="material-icons-round">tag</span> <span id="infopanelNodeIdText"></span></div>
+    </div>
+    <div class="infopanel-divider" id="infopanelDivider" style="display:none;"></div>
+    <div id="infopanelContent">
+        <div class="infopanel-empty">
+            <span class="material-icons-round">touch_app</span>
+            Select a node to view its details.
+        </div>
+    </div>
+</div>
+
 <script src="dataset.js"></script>
-
 <script>
-    // ── DATA ──
-  /*  var nodes = new vis.DataSet([
-        { id: "openEHR-EHR-ACTION.medication.v1",  label: "openEHR-EHR-ACTION.medication.v1",  shape: "dot", size: 18, color: { background: "#6c63ff", border: "#8a83ff", highlight: { background: "#00d4aa", border: "#00f0c0" }, hover: { background: "#8a83ff", border: "#a09aff" } }, font: { color: "#cccce0", size: 12 } },
-        { id: "openEHR-EHR-CLUSTER.dosage.v1",     label: "openEHR-EHR-CLUSTER.dosage.v1",     shape: "dot", size: 18, color: { background: "#6c63ff", border: "#8a83ff", highlight: { background: "#00d4aa", border: "#00f0c0" }, hover: { background: "#8a83ff", border: "#a09aff" } }, font: { color: "#cccce0", size: 12 } }
-    ]); 
-    
-
-    var edges = new vis.DataSet([
-        { from: "openEHR-EHR-ACTION.medication.v1", to: "openEHR-EHR-CLUSTER.dosage.v1", arrows: "to", width: 20, color: { color: "rgba(108,99,255,0.45)", highlight: "#00d4aa", hover: "rgba(108,99,255,0.7)" }, smooth: { type: "curvedCW", roundness: 0.15 } }
-    ]);
-    */
-
     // ── NETWORK ──
     var container = document.getElementById('mynetwork');
     var data = { nodes: nodes, edges: edges };
     var options = {
-        configure: {
-            enabled: false
-        },
-        edges: {
-            smooth: {
-                enabled: true,
-                type: "dynamic"
-            }
-        },
-        interaction: {
-            dragNodes: true,
-            hover: true,
-            tooltipDelay: 150,
-            zoomView: true,
-            dragView: true
-        },
+        configure: { enabled: false },
+        edges: { smooth: { enabled: true, type: "dynamic" } },
+        interaction: { dragNodes: true, hover: true, tooltipDelay: 150, zoomView: true, dragView: true },
         physics: {
-            enabled: true,
-            solver: "forceAtlas2Based",
-            forceAtlas2Based: {
-                gravitationalConstant: -60,
-                centralGravity: 0.008,
-                springLength: 160,
-                springConstant: 0.06,
-                avoidOverlap: 0.6
-            },
-            stabilization: {
-                enabled: true,
-                iterations: 1000,
-                updateInterval: 50,
-                fit: true
-            }
-        }
-    };
-
-  options = {
-        configure: {
-            enabled: false
-        },
-        edges: {
-            smooth: {
-                enabled: true,
-                type: "dynamic"
-            }
-        },
-        interaction: {
-            dragNodes: true,
-            hover: true,
-            tooltipDelay: 150,
-            zoomView: true,
-            dragView: true
-        },
-        physics: {
-            enabled: true,
-            solver: "forceAtlas2Based",
-            forceAtlas2Based: {
-                gravitationalConstant: -60,
-                centralGravity: 0.005,
-                springLength: 260,
-                springConstant: 0.06,
-                avoidOverlap: 0.6
-            },
-            stabilization: {
-                enabled: true,
-                iterations: 500,
-                updateInterval: 50,
-                fit: true
-            }
+            enabled: true, solver: "forceAtlas2Based",
+            forceAtlas2Based: { gravitationalConstant: -60, centralGravity: 0.005, springLength: 260, springConstant: 0.06, avoidOverlap: 0.6 },
+            stabilization: { enabled: true, iterations: 500, updateInterval: 50, fit: true }
         }
     };
 
@@ -441,14 +412,11 @@
             filtered = allNodes.filter(function(n) { return n.label.toLowerCase().indexOf(q) !== -1; });
         }
         document.getElementById('nodeCount').textContent = filtered.length + ' of ' + allNodes.length + ' nodes';
-
         if (filtered.length === 0) {
             list.innerHTML = '<div class="no-results"><span class="material-icons-round">search_off</span>No nodes match your search.</div>';
             return;
         }
-
         filtered.sort(function(a, b) { return a.label.localeCompare(b.label); });
-
         var html = '';
         filtered.forEach(function(n) {
             var active = n.id === activeNodeId ? ' active' : '';
@@ -458,12 +426,8 @@
                   + '</div>';
         });
         list.innerHTML = html;
-
         list.querySelectorAll('.node-item').forEach(function(el) {
-            el.addEventListener('click', function() {
-                var id = this.getAttribute('data-id');
-                focusNode(id);
-            });
+            el.addEventListener('click', function() { focusNode(this.getAttribute('data-id')); });
         });
     }
 
@@ -474,26 +438,98 @@
         return text.substring(0, idx) + '<strong style="color:#00d4aa">' + text.substring(idx, idx + query.length) + '</strong>' + text.substring(idx + query.length);
     }
 
+    // ── INFO PANEL ──
+    var infoPanelManuallyHidden = false;
+
+    function showInfoPanel(nodeId) {
+        var node = nodes.get(nodeId);
+        if (!node) return;
+
+        var panel = document.getElementById('infopanel');
+        var content = document.getElementById('infopanelContent');
+        var nodeIdEl = document.getElementById('infopanelNodeId');
+        var nodeIdText = document.getElementById('infopanelNodeIdText');
+        var divider = document.getElementById('infopanelDivider');
+         /*var titleEl = document.getElementById('infopanelTitle');
+       titleEl.textContent = node.label || node.id;*/
+
+        // Show node ID badge
+        nodeIdText.textContent = node.id;
+        nodeIdEl.style.display = 'block';
+        divider.style.display = 'block';
+
+        // Render info content
+        if (node.info && node.info.trim() !== '') {
+            content.innerHTML = node.info;
+        } else {
+            content.innerHTML = '<div class="infopanel-empty">'
+                + '<span class="material-icons-round">info_outline</span>'
+                + 'No additional info available for this node.'
+                + '</div>';
+        }
+
+        // Open panel (unless user manually closed it)
+        if (!infoPanelManuallyHidden) {
+            panel.classList.add('open');
+            document.getElementById('btnInfoPanel').classList.add('active-toggle');
+        }
+    }
+
+    function clearInfoPanel() {
+        var content = document.getElementById('infopanelContent');
+        var nodeIdEl = document.getElementById('infopanelNodeId');
+        var divider = document.getElementById('infopanelDivider');
+        /*var titleEl = document.getElementById('infopanelTitle');
+
+        titleEl.textContent = 'Node Info';*/
+        nodeIdEl.style.display = 'none';
+        divider.style.display = 'none';
+        content.innerHTML = '<div class="infopanel-empty">'
+            + '<span class="material-icons-round">touch_app</span>'
+            + 'Select a node to view its details.'
+            + '</div>';
+
+        // Close panel
+        document.getElementById('infopanel').classList.remove('open');
+        document.getElementById('btnInfoPanel').classList.remove('active-toggle');
+    }
+
+    function toggleInfoPanel() {
+        var panel = document.getElementById('infopanel');
+        var isOpen = panel.classList.contains('open');
+        if (isOpen) {
+            panel.classList.remove('open');
+            document.getElementById('btnInfoPanel').classList.remove('active-toggle');
+            infoPanelManuallyHidden = true;
+        } else {
+            panel.classList.add('open');
+            document.getElementById('btnInfoPanel').classList.add('active-toggle');
+            infoPanelManuallyHidden = false;
+            // If a node is selected, refresh its content
+            if (activeNodeId) showInfoPanel(activeNodeId);
+        }
+    }
+
+    // ── FOCUS NODE ──
     function focusNode(id) {
         activeNodeId = id;
         network.selectNodes([id]);
         network.focus(id, { scale: 1.5, animation: { duration: 600, easingFunction: 'easeInOutQuad' } });
-        document.getElementById('selected-info').textContent = '⬤  ' + id;
+        document.getElementById('selected-info').textContent = '\u2b24  ' + id;
         buildList(document.getElementById('nodeSearch').value);
+        showInfoPanel(id);
     }
 
     // Search input
-    document.getElementById('nodeSearch').addEventListener('input', function() {
-        buildList(this.value);
-    });
+    document.getElementById('nodeSearch').addEventListener('input', function() { buildList(this.value); });
 
-    // Sync: clicking a node in the network highlights in sidebar
+    // Sync: clicking a node in the network
     network.on('selectNode', function(params) {
         if (params.nodes.length) {
             activeNodeId = params.nodes[0];
-            document.getElementById('selected-info').textContent = '⬤  ' + activeNodeId;
+            document.getElementById('selected-info').textContent = '\u2b24  ' + activeNodeId;
             buildList(document.getElementById('nodeSearch').value);
-            // scroll into view
+            showInfoPanel(activeNodeId);
             var el = document.querySelector('.node-item.active');
             if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
@@ -503,6 +539,8 @@
         activeNodeId = null;
         document.getElementById('selected-info').textContent = '';
         buildList(document.getElementById('nodeSearch').value);
+        clearInfoPanel();
+        infoPanelManuallyHidden = false;
     });
 
     // ── TOOLBAR ──
@@ -520,17 +558,27 @@
     });
 
     var physicsEnabled = true;
-document.getElementById('btnPhysics').addEventListener('click', function() {
-    physicsEnabled = !physicsEnabled;
-    network.setOptions({ physics: { enabled: physicsEnabled } });
-    var icon = this.querySelector('.material-icons-round');
-    icon.textContent = physicsEnabled ? 'pause' : 'play_arrow';
-    this.title = physicsEnabled ? 'Pause physics' : 'Resume physics';
-});
+    document.getElementById('btnPhysics').addEventListener('click', function() {
+        physicsEnabled = !physicsEnabled;
+        network.setOptions({ physics: { enabled: physicsEnabled } });
+        var icon = this.querySelector('.material-icons-round');
+        icon.textContent = physicsEnabled ? 'pause' : 'play_arrow';
+        this.title = physicsEnabled ? 'Pause physics' : 'Resume physics';
+        this.classList.toggle('active-toggle', !physicsEnabled);
+    });
+
+    document.getElementById('btnInfoPanel').addEventListener('click', toggleInfoPanel);
+    
+    /*
+    document.getElementById('closeInfoPanel').addEventListener('click', function() {
+        document.getElementById('infopanel').classList.remove('open');
+        document.getElementById('btnInfoPanel').classList.remove('active-toggle');
+        infoPanelManuallyHidden = true;
+    });
+    */
 
     // Initial build
     buildList('');
 </script>
-
 </body>
 </html>
