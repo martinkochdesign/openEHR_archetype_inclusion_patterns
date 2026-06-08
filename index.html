@@ -338,6 +338,7 @@
         <button class="tool-btn" id="btnZoomOut" title="Zoom out"><span class="material-icons-round">remove</span></button>
         <button class="tool-btn" id="btnPhysics" title="Pause physics"><span class="material-icons-round">pause</span></button>
         <button class="tool-btn" id="btnInfoPanel" title="Toggle info panel"><span class="material-icons-round">info</span></button>
+        <button class="tool-btn" id="btnDownload" title="Download raw data file"><span class="material-icons-round">download</span></button>
         <span id="selected-info"></span>
     </div>
     <div id="mynetwork"></div>
@@ -579,6 +580,14 @@
 
     // Initial build
     buildList('');
+
+
+    document.getElementById('btnDownload').addEventListener('click', function() {
+    var a = document.createElement('a');
+    a.href = 'source_data.xlsx';
+    a.download = 'source_data.xlsx';
+    a.click();
+});
 </script>
 </body>
 </html>
