@@ -375,15 +375,41 @@
     var container = document.getElementById('mynetwork');
     var data = { nodes: nodes, edges: edges };
     var options = {
-        configure: { enabled: false },
-        edges: { smooth: { enabled: true, type: "dynamic" } },
-        interaction: { dragNodes: true, hover: true, tooltipDelay: 150, zoomView: true, dragView: true },
+        configure: {
+            enabled: false
+        },
+        edges: {
+            smooth: {
+                enabled: true,
+                type: "dynamic"
+            }
+        },
+        interaction: {
+            dragNodes: true,
+            hover: true,
+            tooltipDelay: 150,
+            zoomView: true,
+            dragView: true
+        },
         physics: {
-            enabled: true, solver: "forceAtlas2Based",
-            forceAtlas2Based: { gravitationalConstant: -60, centralGravity: 0.004, springLength: 300, springConstant: 0.05, avoidOverlap: 0.7 },
-            stabilization: { enabled: true, iterations: 500, updateInterval: 50, fit: true }
+            enabled: true,
+            solver: "forceAtlas2Based",
+            forceAtlas2Based: {
+                gravitationalConstant: -100,
+                centralGravity: 0.003,
+                springLength: 500,
+                springConstant: 0.05,
+                avoidOverlap: 0.9
+            },
+            stabilization: {
+                enabled: true,
+                iterations: 500,
+                updateInterval: 50,
+                fit: true
+            }
         }
     };
+
 
     var network = new vis.Network(container, data, options);
 
