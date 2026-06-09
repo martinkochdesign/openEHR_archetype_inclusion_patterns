@@ -1,4 +1,4 @@
-name: Weekly Archetype Dataset Update
+name: Monthly Archetype Modelling Patterns Dataset Update
 
 on:
   schedule:
