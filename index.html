@@ -909,7 +909,7 @@
         activeNodeId = id;
         network.selectNodes([id]);
         network.focus(id, { scale: 1.5, animation: { duration: 600, easingFunction: 'easeInOutQuad' } });
-        document.getElementById('selected-info').textContent = '\u2b24  ' + id;
+        /*document.getElementById('selected-info').textContent = '\u2b24  ' + id;*/
         buildList(document.getElementById('nodeSearch').value);
         showInfoPanel(id);
 
@@ -925,7 +925,7 @@
     network.on('selectNode', function(params) {
         if (params.nodes.length) {
             activeNodeId = params.nodes[0];
-            document.getElementById('selected-info').textContent = '\u2b24  ' + activeNodeId;
+            /* document.getElementById('selected-info').textContent = '\u2b24  ' + activeNodeId; */
             buildList(document.getElementById('nodeSearch').value);
             showInfoPanel(activeNodeId);
             requestAnimationFrame(function() {
