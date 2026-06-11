@@ -600,8 +600,6 @@
         }
     };
 
-
-
     var network = new vis.Network(container, data, options);
 
     // ── Store original node colors for reset ──
@@ -629,11 +627,21 @@
 
     function getAllTemplates() {
         var templateMap = {};
+        // Collect templates from nodes
         nodes.get().forEach(function(n) {
             if (n.templates && Array.isArray(n.templates)) {
                 n.templates.forEach(function(t) {
                     if (!templateMap[t]) templateMap[t] = 0;
                     templateMap[t]++;
+                });
+            }
+        });
+        // Also collect templates from edges (in case some only appear on edges)
+        edges.get().forEach(function(e) {
+            if (e.templates && Array.isArray(e.templates)) {
+                e.templates.forEach(function(t) {
+                    if (!templateMap[t]) templateMap[t] = 0;
+                    // Don't increment — count stays node-based for the badge
                 });
             }
         });
@@ -703,12 +711,12 @@
 
         var isLight = document.body.classList.contains('light');
         var matchCount = 0;
-        var updates = [];
+        var nodeUpdates = [];
         nodes.get().forEach(function(n) {
             var hasTemplate = n.templates && Array.isArray(n.templates) && n.templates.indexOf(name) !== -1;
             if (hasTemplate) {
                 matchCount++;
-                updates.push({
+                nodeUpdates.push({
                     id: n.id,
                     color: {
                         background: isLight ? '#d97706' : '#f5a623',
@@ -719,7 +727,7 @@
                     font: { color: isLight ? '#1a1a2e' : '#fff', size: 13 }
                 });
             } else {
-                updates.push({
+                nodeUpdates.push({
                     id: n.id,
                     color: {
                         background: isLight ? 'rgba(0,0,0,0.06)' : 'rgba(100,100,130,0.15)',
@@ -731,15 +739,13 @@
                 });
             }
         });
-        nodes.update(updates);
+        nodes.update(nodeUpdates);
 
-        var matchedIds = new Set(nodes.get().filter(function(n) {
-            return n.templates && n.templates.indexOf(name) !== -1;
-        }).map(function(n) { return n.id; }));
-
+        // ── Edge highlighting based on edge's own templates attribute ──
         var edgeUpdates = [];
         edges.get().forEach(function(e) {
-            if (matchedIds.has(e.from) && matchedIds.has(e.to)) {
+            var hasTemplate = e.templates && Array.isArray(e.templates) && e.templates.indexOf(name) !== -1;
+            if (hasTemplate) {
                 edgeUpdates.push({ id: e.id, color: { color: isLight ? 'rgba(217,119,6,0.45)' : 'rgba(245,166,35,0.5)', highlight: isLight ? '#e69a1e' : '#ffc857', hover: isLight ? 'rgba(217,119,6,0.65)' : 'rgba(245,166,35,0.7)' }});
             } else {
                 edgeUpdates.push({ id: e.id, color: { color: isLight ? 'rgba(0,0,0,0.06)' : 'rgba(100,100,130,0.1)', highlight: isLight ? 'rgba(0,0,0,0.1)' : 'rgba(100,100,130,0.2)', hover: isLight ? 'rgba(0,0,0,0.08)' : 'rgba(100,100,130,0.15)' }});
@@ -796,7 +802,7 @@
 
         buildList(document.getElementById('nodeSearch').value);
     }
-    
+
     document.getElementById('clearTemplate').addEventListener('click', clearTemplateFilter);
 
     // ── SIDEBAR LIST ──
@@ -855,7 +861,7 @@
         var divider = document.getElementById('infopanelDivider');
 
         nodeIdText.textContent = node.id;
-        nodeIdEl.style.display = 'none'; /* 'block' if we want to show the badge */
+        nodeIdEl.style.display = 'none';
         divider.style.display = 'block';
 
         if (node.info && node.info.trim() !== '') {
@@ -909,11 +915,9 @@
         activeNodeId = id;
         network.selectNodes([id]);
         network.focus(id, { scale: 1.5, animation: { duration: 600, easingFunction: 'easeInOutQuad' } });
-        /*document.getElementById('selected-info').textContent = '\u2b24  ' + id;*/
         buildList(document.getElementById('nodeSearch').value);
         showInfoPanel(id);
 
-        // Scroll sidebar to active node after DOM update
         requestAnimationFrame(function() {
             var el = document.querySelector('.node-item.active');
             if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -925,7 +929,6 @@
     network.on('selectNode', function(params) {
         if (params.nodes.length) {
             activeNodeId = params.nodes[0];
-            /* document.getElementById('selected-info').textContent = '\u2b24  ' + activeNodeId; */
             buildList(document.getElementById('nodeSearch').value);
             showInfoPanel(activeNodeId);
             requestAnimationFrame(function() {
@@ -984,7 +987,6 @@
         icon.textContent = isLight ? 'dark_mode' : 'light_mode';
         this.title = isLight ? 'Switch to dark theme' : 'Switch to light theme';
 
-        // Update node colors for the current theme if no template filter is active
         if (!activeTemplateName) {
             var updates = [];
             nodes.get().forEach(function(n) {
@@ -1001,7 +1003,6 @@
             });
             nodes.update(updates);
 
-            // Update stored original colors
             nodes.get().forEach(function(n) {
                 originalColors[n.id] = { color: n.color, font: n.font };
             });
@@ -1019,7 +1020,6 @@
             });
             edges.update(edgeUpdates);
         } else {
-            // Re-apply template filter with theme-appropriate colors
             selectTemplate(activeTemplateName);
         }
     });

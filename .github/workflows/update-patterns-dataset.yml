@@ -25,7 +25,7 @@ jobs:
 
       - name: Run design pattern extractor script
         run: |
-          python archetype_design_patterns_v1_6.py
+          python archetype_design_patterns_v1_7.py
 
       - name: Commit and push updated dataset
         run: |
