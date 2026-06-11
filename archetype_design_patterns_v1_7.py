@@ -215,7 +215,7 @@ for origin_archetype in archetypeList:
 	info_text = ''
 
 	# ── Header ──
-	info_text += '<h3 style="margin:0 0 4px 0; color:#fff;">' + origin_archetype + '</h3>'
+	info_text += '<h3 style="margin:0 0 4px 0;">' + origin_archetype + '</h3>'
 	info_text += '<hr style="border:none; height:1px; background:rgba(255,255,255,0.06); margin:8px 0 16px 0;">'
 
 	# Get all pairs where the archetype contains another archetype
