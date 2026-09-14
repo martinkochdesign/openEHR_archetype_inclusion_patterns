@@ -583,6 +583,10 @@
 <script src="dataset.js"></script>
 <script>
     // ── NETWORK ──
+    copyright = document.getElementById('copyright_text').innerText;
+    document.getElementById('copyright_text').innerText= 'Updated: ' + updated + '\n' + copyright;
+
+
     var container = document.getElementById('mynetwork');
     var data = { nodes: nodes, edges: edges };
     var options = {
